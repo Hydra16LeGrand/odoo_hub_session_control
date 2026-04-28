@@ -9,36 +9,36 @@
 
 ### Résumé
 
-Ce module compagnon s'installe sur les instances clientes pour controler et limiter les sessions creees depuis le Hub (`odoo_db_remote_management`). Il impose une duree maximale de connexion, un couvre-feu horaire, et notifie le Hub lors de la deconnexion.
+Ce module compagnon s'installe sur les instances clientes pour contrôler et limiter les sessions créées depuis le Hub (`odoo_db_remote_management`). Il impose une durée maximale de connexion, un couvre-feu horaire, et notifie le Hub lors de la déconnexion.
 
 ### Fonctionnalités
 
-- **Detection des sessions Hub** : identification des sessions creees via le Hub grace a un parametre `hub_managed` dans la session
-- **Deconnexion automatique** : termine la session lorsque la duree maximale est atteinte ou lorsque l'heure de couvre-feu est passee
-- **Avertissement utilisateur** : popup JavaScript affichee avant l'expiration, indiquant le temps restant et la raison (duree ou couvre-feu)
-- **Prolongation de session** : possibilite de prolonger la session jusqu'a 2 fois via un bouton dans la popup
-- **Callback vers le Hub** : notification HTTP au Hub lors de la deconnexion pour mettre a jour le journal d'acces
-- **Nettoyage par cron** : tache planifiee toutes les 5 minutes pour purger les sessions expirees en fallback
+- **Détection des sessions Hub** : identification des sessions créées via le Hub grâce à un paramètre `hub_managed` dans la session
+- **Déconnexion automatique** : termine la session lorsque la durée maximale est atteinte ou lorsque l'heure de couvre-feu est passée
+- **Avertissement utilisateur** : popup JavaScript affichée avant l'expiration, indiquant le temps restant et la raison (durée ou couvre-feu)
+- **Prolongation de session** : possibilité de prolonger la session jusqu'à 2 fois via un bouton dans la popup
+- **Callback vers le Hub** : notification HTTP au Hub lors de la déconnexion pour mettre à jour le journal d'accès
+- **Nettoyage par cron** : tâche planifiée toutes les 5 minutes pour purger les sessions expirées en fallback
 
 ### Installation
 
 1. Installer le module `odoo_hub_session_control` sur l'instance cliente.
-2. S'assurer que `auth_oauth` est configure pour pointer vers le Hub.
-3. Aucune configuration supplementaire n'est requise ; les parametres sont transmis automatiquement lors de la connexion depuis le Hub.
+2. S'assurer que `auth_oauth` est configuré pour pointer vers le Hub.
+3. Aucune configuration supplémentaire n'est requise ; les paramètres sont transmis automatiquement lors de la connexion depuis le Hub.
 
 ### Architecture technique
 
 Le module fonctionne en trois couches :
 
-1. **Override `ir.http._authenticate`** : detecte le parametre `hub_managed=1` dans l'URL lors de la connexion OAuth et initialise les flags de session (`session_max_duration`, `session_disconnect_ts`, `hub_log_id`, `hub_url`). A chaque requete subsequente, verifie si la session a expire et declenche la deconnexion.
+1. **Override `ir.http._authenticate`** : détecte le paramètre `hub_managed=1` dans l'URL lors de la connexion OAuth et initialise les flags de session (`session_max_duration`, `session_disconnect_ts`, `hub_log_id`, `hub_url`). À chaque requête subséquente, vérifie si la session a expiré et déclenche la déconnexion.
 
-2. **Popup JavaScript** (`session_warning.js`) : s'execute cote client, lit les flags depuis l'objet `session`, calcule le temps restant avant expiration, et affiche une popup d'avertissement `warn_before` secondes avant la fin. Permet de se deconnecter ou de prolonger la session.
+2. **Popup JavaScript** (`session_warning.js`) : s'exécute côté client, lit les flags depuis l'objet `session`, calcule le temps restant avant expiration, et affiche une popup d'avertissement `warn_before` secondes avant la fin. Permet de se déconnecter ou de prolonger la session.
 
-3. **Cron `hub.session.cron`** : parcourt le session store pour identifier les sessions Hub expirees (duree ou couvre-feu), envoie le callback au Hub, et supprime la session.
+3. **Cron `hub.session.cron`** : parcourt le session store pour identifier les sessions Hub expirées (durée ou couvre-feu), envoie le callback au Hub, et supprime la session.
 
-### Dependances
+### Dépendances
 
-- [odoo_db_remote_management](https://github.com/amara-baradji/odoo_db_remote_management) (Hub) : module fournissant le mecanisme de connexion distante
+- [odoo_db_remote_management](https://github.com/Hydra16LeGrand/odoo_db_remote_management) (Hub) : module fournissant le mécanisme de connexion distante
 
 ---
 
@@ -76,7 +76,7 @@ The module works in three layers:
 
 ### Dependencies
 
-- [odoo_db_remote_management](https://github.com/amara-baradji/odoo_db_remote_management) (Hub): module providing the remote connection mechanism
+- [odoo_db_remote_management](https://github.com/Hydra16LeGrand/odoo_db_remote_management) (Hub): module providing the remote connection mechanism
 
 ---
 
